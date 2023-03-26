@@ -62,7 +62,14 @@ void Button::setColor(Color background, Color foreground)
 
 bool Button::isPressed()
 {
+	using namespace std::chrono;
+
 	COORD coord = Console::getMousePosition();
+	long long now = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+	static long long lastHit = 0;
+
+	if (now - 250 < lastHit)
+		return false;
 
 	if (!(GetKeyState(VK_LBUTTON) & 0x8000))
 		return false;
@@ -71,6 +78,7 @@ bool Button::isPressed()
 	if (coord.Y < start.Y || coord.Y > end.Y)
 		return false;
 
+	lastHit = now;
 	return true;
 }
 

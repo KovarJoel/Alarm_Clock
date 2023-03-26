@@ -1,5 +1,6 @@
 #pragma once
 #pragma warning( disable : 4369)	// enumerator value cannot be represented as char
+#include <chrono>
 #include "Console.h"
 
 class Button
