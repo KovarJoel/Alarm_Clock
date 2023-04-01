@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ImGui Headers">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="ImGui Source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\Documents\.Programme\.libraries\Dear ImGui\imgui.cpp">
+      <Filter>ImGui Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Documents\.Programme\.libraries\Dear ImGui\imgui_demo.cpp">
+      <Filter>ImGui Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Documents\.Programme\.libraries\Dear ImGui\imgui_draw.cpp">
+      <Filter>ImGui Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Documents\.Programme\.libraries\Dear ImGui\imgui_tables.cpp">
+      <Filter>ImGui Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Documents\.Programme\.libraries\Dear ImGui\imgui_widgets.cpp">
+      <Filter>ImGui Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Documents\.Programme\.libraries\Dear ImGui\backends\imgui_impl_glfw.cpp">
+      <Filter>ImGui Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Documents\.Programme\.libraries\Dear ImGui\backends\imgui_impl_opengl3.cpp">
+      <Filter>ImGui Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Documents\.Programme\.libraries\Dear ImGui\backends\imgui_impl_win32.cpp">
+      <Filter>ImGui Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application.cpp">
+      <Filter>ImGui Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Assert.cpp">
+      <Filter>ImGui Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\main.cpp">
+      <Filter>ImGui Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Alarm\Alarm.cpp">
+      <Filter>ImGui Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Alarm\AlarmClock.cpp">
+      <Filter>ImGui Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Alarm\Sound.cpp">
+      <Filter>ImGui Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Alarm\Time.cpp">
+      <Filter>ImGui Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\Documents\.Programme\.libraries\Dear ImGui\imconfig.h">
+      <Filter>ImGui Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Documents\.Programme\.libraries\Dear ImGui\imgui.h">
+      <Filter>ImGui Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Documents\.Programme\.libraries\Dear ImGui\imgui_internal.h">
+      <Filter>ImGui Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Documents\.Programme\.libraries\Dear ImGui\backends\imgui_impl_glfw.h">
+      <Filter>ImGui Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Documents\.Programme\.libraries\Dear ImGui\backends\imgui_impl_opengl3.h">
+      <Filter>ImGui Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Documents\.Programme\.libraries\Dear ImGui\backends\imgui_impl_opengl3_loader.h">
+      <Filter>ImGui Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Documents\.Programme\.libraries\Dear ImGui\backends\imgui_impl_win32.h">
+      <Filter>ImGui Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application.h">
+      <Filter>ImGui Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Assert.h">
+      <Filter>ImGui Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Alarm\Alarm.h">
+      <Filter>ImGui Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Alarm\AlarmClock.h">
+      <Filter>ImGui Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Alarm\Sound.h">
+      <Filter>ImGui Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Alarm\Time.h">
+      <Filter>ImGui Headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

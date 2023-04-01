@@ -8,7 +8,8 @@ Application::Application(const std::string& windowTitle)
 	ring = std::thread(&Application::ringCallback, this);
 	sound.setPath("C:\\Users\\abc\\Desktop\\gong.mp3");
 
-	alarms.push_back(Alarm(Time(Saturday, 18, 11, 2)));
+	for (int i = 0; i < 10; i++)
+		alarms.push_back(Alarm(Time(Saturday, 18, 11, 2)));
 }
 
 Application::~Application()
@@ -40,7 +41,6 @@ void Application::render()
 	Time now = Time::now();
 	static Time last;
 
-	last = now;
 	Console::setCursorPosition(0, 0);
 
 	// header
@@ -77,7 +77,7 @@ void Application::render()
 	}
 
 	last = now;
-	std::this_thread::sleep_for(100ms);
+	//std::this_thread::sleep_for(100ms);
 }
 
 void Application::sortAlarms()

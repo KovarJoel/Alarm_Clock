@@ -20,6 +20,8 @@ public:
 	static void setColor(WORD color);
 	static void setColor(Color background, Color foreground);
 
+	static COORD getFontSize();
+
 	static COORD getCursorPosition();
 	static void setCursorPosition(COORD coord);
 	static void setCursorPosition(short x, short y);

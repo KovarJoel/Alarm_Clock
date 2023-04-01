@@ -62,6 +62,23 @@ void Console::setColor(Color background, Color foreground)
 	SetConsoleTextAttribute(hOutput, color);
 }
 
+COORD Console::getFontSize()
+{
+	HANDLE hOutput = GetStdHandle(STD_OUTPUT_HANDLE);
+	
+	CONSOLE_SCREEN_BUFFER_INFO csbi{};
+	RECT window;
+	COORD size;
+
+	GetConsoleScreenBufferInfo(hOutput, &csbi);
+	GetWindowRect(GetForegroundWindow(), &window);
+	
+	size.X = (window.right - window.left) / csbi.dwSize.X + 1;
+	size.Y = (window.bottom - window.top) / csbi.dwSize.Y;
+
+	return size;
+}
+
 COORD Console::getCursorPosition()
 {
 	CONSOLE_SCREEN_BUFFER_INFO info{};
@@ -86,10 +103,17 @@ void Console::setCursorPosition(short x, short y)
 
 POINT Console::getMousePoint()
 {
+	RECT window;
+	HWND hWindow = GetForegroundWindow();
+	GetWindowRect(hWindow, &window);
+
 	POINT point{};
 	GetCursorPos(&point);
-	ScreenToClient(GetForegroundWindow(), &point);
+	ScreenToClient(hWindow, &point);
 
+	point.x -= getFontSize().X;
+	point.y -= 2 * getFontSize().Y;
+	
 	return point;
 }
 
@@ -97,8 +121,8 @@ COORD Console::getMousePosition()
 {
 	POINT point = getMousePoint();
 	COORD coord{};
-	coord.X = static_cast<short>(point.x / 8);
-	coord.Y = static_cast<short>(point.y / 16);
+	coord.X = static_cast<short>(point.x / (getFontSize().X + 1));
+	coord.Y = static_cast<short>(point.y / (getFontSize().Y - 2) - 2.5);
 
 	return coord;
 }

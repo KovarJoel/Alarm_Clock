@@ -44,7 +44,7 @@ void Button::setPosition(COORD start)
 {
 	this->start = start;
 
-	end.X = start.X + static_cast<short>(text.size()) + (hasFrame ? 1 : 0);
+	end.X = start.X + static_cast<short>(text.size()) - 1 + (hasFrame ? 2 : 0);
 	end.Y = start.Y + (hasFrame ? 2 : 0);
 }
 
@@ -64,7 +64,7 @@ bool Button::isPressed()
 {
 	using namespace std::chrono;
 
-	COORD coord = Console::getMousePosition();
+	POINT point = Console::getMousePoint();
 	long long now = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 	static long long lastHit = 0;
 
@@ -73,9 +73,9 @@ bool Button::isPressed()
 
 	if (!(GetKeyState(VK_LBUTTON) & 0x8000))
 		return false;
-	if (coord.X < start.X || coord.X > end.X)
+	if (point.x < (start.X * Console::getFontSize().X) || point.x > ((end.X + 1) * Console::getFontSize().X))
 		return false;
-	if (coord.Y < start.Y || coord.Y > end.Y)
+	if (point.y < (start.Y * Console::getFontSize().Y) || point.y > ((end.Y + 1) * Console::getFontSize().Y))
 		return false;
 
 	lastHit = now;
@@ -129,7 +129,7 @@ void Button::print(TextLocation horizontal, TextLocation vertical)
 	default:
 		textStart.X = start.X + (end.X - start.X) / 2;
 		textStart.X -= static_cast<short>(text.size()) / 2;
-		if (!(text.size() % 2))
+		if (text.size() % 2)
 			textStart.X += 1;
 		break;
 	}
