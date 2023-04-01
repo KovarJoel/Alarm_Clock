@@ -34,7 +34,7 @@ void AlarmClock::handleEvents()
 void AlarmClock::update()
 {
 	sortAlarms();
-	sortAlarmsUpcoming();
+	//sortAlarmsUpcoming();
 }
 
 void AlarmClock::render()
@@ -84,9 +84,17 @@ void AlarmClock::render()
 
 	if (child != -1)
 	{
-		ImGui::BeginChild(ImGui::GetID("Upcoming Alarm"));
+		ImGuiWindowFlags childFlags = 0;
+		childFlags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground;
+		childFlags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoMove;
+		childFlags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar;
+		childFlags |= ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize;
 
-		ImGui::SliderInt3("Time", &alarms.at(child).time.hours, 0, 60);
+		ImGui::BeginChild(ImGui::GetID("Upcoming Alarms"), ImVec2(400, 100), false, childFlags);
+
+		ImGui::SliderInt3("Time", &alarms.at(child).time.hours, 0, 59);
+		if (ImGui::Button("Done"))
+			child = -1;
 
 		ImGui::EndChild();
 	}
