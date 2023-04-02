@@ -21,6 +21,8 @@ void AlarmClock::init()
 	alarms.push_back(Alarm(Time::now()));
 	alarms.push_back(Alarm(Time(Saturday, 8, 0, 0)));
 	alarms.push_back(Alarm(Time(Monday, 6, 0, 0)));
+	alarms.push_back(Alarm(Time(Saturday, 12, 12, 12)));
+	alarms.push_back(Alarm(Time(Wednesday, 20, 20, 20)));
 	sortAlarms();
 	
 	isRunning = true;
@@ -40,18 +42,17 @@ void AlarmClock::update()
 void AlarmClock::render()
 {
 	ImGuiWindowFlags flags = 0;
-	flags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground;
-	flags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoMove;
-	flags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoResize;
-	flags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar;
-	flags |= ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize;
+	//flags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground;
+	//flags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoMove;
+	//flags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoResize;
+	//flags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar;
+	//flags |= ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize;
 
-	ImGui::GetStyle().Colors[ImGuiCol_Button].w = 0.0f;
-	ImGui::GetStyle().Colors[ImGuiCol_ButtonHovered] = ImVec4(1.0f, 1.0f, 1.0f, 0.2f);
+	//ImGui::GetStyle().Colors[ImGuiCol_Button].w = 0.0f;
+	//ImGui::GetStyle().Colors[ImGuiCol_ButtonHovered] = ImVec4(1.0f, 1.0f, 1.0f, 0.2f);
 	//ImGui::GetStyle().ButtonTextAlign = ImVec2(0.8f, 0.5f);
 
-
-	ImGui::Begin(" ", nullptr, flags);
+	ImGui::Begin("Alarms", nullptr, flags);
 	ImGui::SameLine();
 	ImGui::Text(Time::toString(Time::now()).c_str());
 	ImGui::NewLine();
@@ -61,25 +62,21 @@ void AlarmClock::render()
 	static int child = -1;
 	for (size_t i = 0; i < alarms.size(); i++)
 	{
-		if (ImGui::Button(Time::toString(alarms.at(i).time).c_str()))
+		std::string hiddenID = "##" + std::to_string(i);
+
+		ImGui::Text(Time::toString(alarms.at(i).time).c_str());
+
+		ImGui::SameLine();
+		ImGui::SetNextItemWidth(100.0f);
+		ImGui::SliderInt((hiddenID + " toggle ").c_str(), (int*)&alarms.at(i).enabled, 0, 1, (alarms.at(i).enabled ? "ON" : "OFF"));
+
+		ImGui::SameLine();
+		if (ImGui::Button(("EDIT" + hiddenID).c_str()))
 			child = i;
 
-		/*
-			ImGui::SliderInt3(("Alarm " + std::to_string(i)).c_str(), &alarms.at(i).time.hours, 0, 59);
-			ImGui::SameLine();
-			ImGui::PushItemWidth(100.0f);
-			//<mGui::DragScalar("D", ImGuiDataType_::ImGuiDataType_S8, &alarms.at(i).time.day,
-				//0.04F, (const void*)0, (const void*)0, Time::weekDayToString(alarms.at(i).time.day).c_str());
-			ImGui::PopItemWidth();
-			if (alarms.at(i).time.day > Saturday)
-				alarms.at(i).time.day = Sunday;
-			if (alarms.at(i).time.day < Sunday)
-				alarms.at(i).time.day = Saturday;
-			ImGui::SameLine();
-			//ImGui::DragScalar(("Enabled " + std::to_string(i)).c_str(), ImGuiDataType_::ImGuiDataType_U8);
-			//ImGui::Checkbox(("Enabled " + std::to_string(i)).c_str(), & alarms.at(i).enabled);
-			//ImGui::InvisibleButton("Button Test", (ImVec2)())
-		*/
+		ImGui::SameLine();
+		if (ImGui::Button(("DELETE" + hiddenID).c_str()))
+			alarms.erase(alarms.begin() + i);
 	}
 
 	if (child != -1)
@@ -90,9 +87,16 @@ void AlarmClock::render()
 		childFlags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar;
 		childFlags |= ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize;
 
-		ImGui::BeginChild(ImGui::GetID("Upcoming Alarms"), ImVec2(400, 100), false, childFlags);
+		ImGui::BeginChild(ImGui::GetID("Upcoming Alarms"), ImVec2(0, 0), false, childFlags);
 
-		ImGui::SliderInt3("Time", &alarms.at(child).time.hours, 0, 59);
+		//ImGui::SliderInt3("Time", &alarms.at(child).time.hours, 0, 59);
+		float width = 100.0f;
+		ImGui::SetNextItemWidth(width);
+		ImGui::SliderInt("##edit hours", &alarms.at(child).time.hours, 0, 23);
+		ImGui::SameLine(0.0f, 4.0f);
+		ImGui::SetNextItemWidth(width * 2.0f + 4.0f);
+		ImGui::SliderInt2("##edit rest", &alarms.at(child).time.minutes, 0, 59);
+
 		if (ImGui::Button("Done"))
 			child = -1;
 
