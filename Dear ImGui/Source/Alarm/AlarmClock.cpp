@@ -76,7 +76,10 @@ void AlarmClock::render()
 
 		ImGui::SameLine();
 		if (ImGui::Button(("DELETE" + hiddenID).c_str()))
+		{
 			alarms.erase(alarms.begin() + i);
+			child = -1;
+		}
 	}
 
 	if (child != -1)
