@@ -41,7 +41,7 @@ bool Application::init(const std::string& windowTitle, const int width, const in
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
 	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
-
+	
 	ImGui::StyleColorsLight();
 
 	ImGuiStyle& style = ImGui::GetStyle();
@@ -67,7 +67,7 @@ bool Application::init(const std::string& windowTitle, const int width, const in
 
 	m_clock.init();
 
-	ImGui::GetIO().Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\calibri.ttf", 20.0f);
+	ImGui::GetIO().Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\FiraCode-Regular.ttf", 20.0f);
 
 	m_isInitialized = true;
 	return true;
