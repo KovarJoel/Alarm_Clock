@@ -137,9 +137,9 @@ std::ostream& operator<<(std::ostream& os, const Time& time)
 	os << std::setfill('0');
 	os << std::setw(2) << time.hours;
 	os << ":" << std::setw(2) << time.minutes;
-	os << ":" << std::setw(2) << time.seconds;
+	os << ":" << std::setw(2) << time.seconds << "  ";
 	os << std::setfill(' ');
-	os << std::setw(12) << Time::weekDayToString(time.day);
+	os << std::setw(11) << std::left << Time::weekDayToString(time.day);
 
 	return os;
 }
