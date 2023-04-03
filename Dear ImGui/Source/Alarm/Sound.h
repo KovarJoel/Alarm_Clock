@@ -3,15 +3,23 @@
 #include <iostream>
 #include <Windows.h>
 #include <fstream>
+#include <irrKlang/irrKlang.h>
 
 class Sound
 {
-public:
-	std::string path;
+private:
+	std::string m_path;
+	irrklang::ISoundEngine* m_soundEngine;
 
-	Sound() = default;
+public:
+
+	Sound();
 	Sound(const std::string& path);
+	~Sound();
 	
 	bool play();
 	bool setPath(const std::string& path);
+
+private:
+	bool pathOk(const std::string& path);
 };
