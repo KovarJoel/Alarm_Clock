@@ -15,10 +15,8 @@ void AlarmClock::init()
 	if (isRunning)
 		return;
 
-	ring = std::thread(&AlarmClock::ringCallback, this);
-	sound.setPath("C:\\Users\\abc\\Desktop\\gong.mp3");
+	sound.setPath("C:\\Users\\abc\\Desktop\\gong.wav");
 
-	alarms.push_back(Alarm(Time::now()));
 	alarms.push_back(Alarm(Time(Saturday, 8, 0, 0)));
 	alarms.push_back(Alarm(Time(Monday, 6, 0, 0)));
 	alarms.push_back(Alarm(Time(Saturday, 12, 12, 12)));
@@ -26,6 +24,7 @@ void AlarmClock::init()
 	sortAlarms();
 	
 	isRunning = true;
+	ring = std::thread(&AlarmClock::ringCallback, this);
 }
 
 void AlarmClock::handleEvents()
@@ -35,7 +34,7 @@ void AlarmClock::handleEvents()
 
 void AlarmClock::update()
 {
-	sortAlarms();
+	//sortAlarms();
 	//sortAlarmsUpcoming();
 }
 
@@ -44,31 +43,27 @@ void AlarmClock::render()
 	ImGuiWindowFlags flags = 0;
 	//flags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground;
 	//flags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoMove;
-	//flags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoResize;
-	//flags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar;
-	//flags |= ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize;
+	flags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoResize;
+	flags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar;
+	flags |= ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize;
 
-	//ImGui::GetStyle().Colors[ImGuiCol_Button].w = 0.0f;
-	//ImGui::GetStyle().Colors[ImGuiCol_ButtonHovered] = ImVec4(1.0f, 1.0f, 1.0f, 0.2f);
-	//ImGui::GetStyle().ButtonTextAlign = ImVec2(0.8f, 0.5f);
-
+	ImGui::SetNextWindowSize(ImVec2(500, 500));
 	ImGui::Begin("Alarms", nullptr, flags);
 	ImGui::SameLine();
 	ImGui::Text(Time::toString(Time::now()).c_str());
 	ImGui::NewLine();
 
 	ImGui::SeparatorText("Upcoming Alarms");
-	
+
 	static int child = -1;
-	for (size_t i = 0; i < alarms.size(); i++)
+	for (int i = 0; i < alarms.size(); i++)
 	{
 		std::string hiddenID = "##" + std::to_string(i);
-
 		ImGui::Text(Time::toString(alarms.at(i).time).c_str());
 
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(100.0f);
-		ImGui::SliderInt((hiddenID + " toggle ").c_str(), (int*)&alarms.at(i).enabled, 0, 1, (alarms.at(i).enabled ? "ON" : "OFF"));
+		ImGui::SliderInt((hiddenID + " toggle ").c_str(), &alarms.at(i).enabled, 0, 1, (alarms.at(i).enabled ? "ON" : "OFF"));
 
 		ImGui::SameLine();
 		if (ImGui::Button(("EDIT" + hiddenID).c_str()))
@@ -78,33 +73,45 @@ void AlarmClock::render()
 		if (ImGui::Button(("DELETE" + hiddenID).c_str()))
 		{
 			alarms.erase(alarms.begin() + i);
-			child = -1;
+
+			if (child == i)
+				child = -1;
+			if (child > i)
+				child--;
+		}
+
+		if (child == i)
+		{
+			ImGui::BeginChild(ImGui::GetID("Alarms"), ImVec2(0, ImGui::GetFontSize() * 4.0f), false, flags);
+			float width = 100.0f;
+			ImGui::SetNextItemWidth(width);
+			ImGui::SliderInt("##edit hours", &alarms.at(child).time.hours, 0, 23);
+			ImGui::SameLine(0.0f, 4.0f);
+			ImGui::SetNextItemWidth(width * 2.0f + 4.0f);
+			ImGui::SliderInt2("##edit rest", &alarms.at(child).time.minutes, 0, 59);
+			ImGui::SameLine(0.0f, 4.0f);
+			ImGui::SetNextItemWidth(width);
+			ImGui::SliderInt("##edit day", (int*)&alarms.at(child).time.day, 0, 6, Time::weekDayToString(alarms.at(child).time.day).c_str());
+			if (ImGui::Button("Done"))
+			{
+				sortAlarms();
+				child = -1;
+			}
+			ImGui::EndChild();
 		}
 	}
 
-	if (child != -1)
+	ImGui::NewLine();
+	ImGui::NewLine();
+	if (ImGui::Button("Add Alarm"))
 	{
-		ImGuiWindowFlags childFlags = 0;
-		childFlags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground;
-		childFlags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoMove;
-		childFlags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar;
-		childFlags |= ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize;
+		Time last = Time::now();
+		last.addTime(Time(Sunday, 0, 0, -1));
+		alarms.push_back(Alarm(last));
 
-		ImGui::BeginChild(ImGui::GetID("Upcoming Alarms"), ImVec2(0, 0), false, childFlags);
-
-		//ImGui::SliderInt3("Time", &alarms.at(child).time.hours, 0, 59);
-		float width = 100.0f;
-		ImGui::SetNextItemWidth(width);
-		ImGui::SliderInt("##edit hours", &alarms.at(child).time.hours, 0, 23);
-		ImGui::SameLine(0.0f, 4.0f);
-		ImGui::SetNextItemWidth(width * 2.0f + 4.0f);
-		ImGui::SliderInt2("##edit rest", &alarms.at(child).time.minutes, 0, 59);
-
-		if (ImGui::Button("Done"))
-			child = -1;
-
-		ImGui::EndChild();
+		child = alarms.size() - 1;
 	}
+	
 
 	ImGui::End();
 }
