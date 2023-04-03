@@ -4,7 +4,7 @@ Time::Time()
 	: seconds(0), minutes(0), hours(0), day(Sunday) {
 }
 
-Time::Time(WeekDay day, int hours, int minutes, int seconds)
+Time::Time(int day, int hours, int minutes, int seconds)
 	: seconds(seconds), minutes(minutes), hours(hours), day(day) {
 }
 
@@ -16,12 +16,52 @@ Time::Time(const time_t time)
 	seconds = local.tm_sec;
 	minutes = local.tm_min;
 	hours = local.tm_hour;
-	day = static_cast<WeekDay>(local.tm_wday);
+	day = local.tm_wday;
 }
 
 Time Time::now()
 {
 	return Time(time(nullptr));
+}
+
+void Time::addTime(const Time& time)
+{
+	hours += time.hours;
+	minutes += time.minutes;
+	seconds += time.seconds;
+
+	while (seconds >= 60) {
+		minutes++;
+		seconds -= 60;
+	}
+	while (seconds < 0) {
+		minutes--;
+		seconds += 60;
+	}
+
+	while (minutes >= 60)
+	{
+		hours++;
+		minutes -= 60;
+	}
+	while (minutes < 0) {
+		hours--;
+		minutes += 60;
+	}
+
+	while (hours >= 24) {
+		day++;
+		hours -= 24;
+	}
+	while (hours < 0) {
+		day--;
+		hours += 24;
+	}
+
+	while (day > Saturday)
+		day -= 6;
+	while (day < Sunday)
+		day += 6;
 }
 
 std::string Time::toString(const Time& time)
@@ -32,41 +72,30 @@ std::string Time::toString(const Time& time)
 	return ss.str();
 }
 
-std::string Time::weekDayToString(WeekDay day)
+std::string Time::weekDayToString(int day)
 {
-	std::string dayName;
-
 	switch (day)
 	{
 	case Sunday:
-		dayName = "Sunday";
-		break;
+		return "Sunday";
 	case Monday:
-		dayName = "Monday";
-		break;
+		return "Monday";
 	case Tuesday:
-		dayName = "Tuesday";
-		break;
+		return "Tuesday";
 	case Wednesday:
-		dayName = "Wednesday";
-		break;
+		return "Wednesday";
 	case Thursday:
-		dayName = "Thursday";
-		break;
+		return "Thursday";
 	case Friday:
-		dayName = "Friday";
-		break;
+		return "Friday";
 	case Saturday:
-		dayName = "Saturday";
-		break;
+		return "Saturday";
 	default:
-		break;
+		return std::string();
 	}
-
-	return dayName;
 }
 
-bool Time::isEqual(const Time& time)
+bool Time::isEqual(const Time& time) const
 {
 	if (seconds == time.seconds	&& minutes == time.minutes
 		&& hours == time.hours && day == time.day)
@@ -74,7 +103,7 @@ bool Time::isEqual(const Time& time)
 	return false;
 }
 
-bool Time::isSmaller(const Time& time)
+bool Time::isSmaller(const Time& time) const
 {
 	if (day < time.day)
 		return true;
@@ -99,7 +128,7 @@ bool Time::isSmaller(const Time& time)
 	return false;
 }
 
-bool Time::isBigger(const Time& time)
+bool Time::isBigger(const Time& time) const
 {
 	if (!isEqual(time) && !isSmaller(time))
 		return true;
@@ -107,34 +136,34 @@ bool Time::isBigger(const Time& time)
 	return false;
 }
 
-bool Time::operator==(const Time& t2)
+bool Time::operator==(const Time& t2) const
 {
 	return isEqual(t2);
 }
 
-bool Time::operator<(const Time& t2)
+bool Time::operator<(const Time& t2) const
 {
 	return isSmaller(t2);
 }
 
-bool Time::operator>(const Time& t2)
+bool Time::operator>(const Time& t2) const
 {
 	return isBigger(t2);
 }
 
-bool Time::operator<=(const Time& t2)
+bool Time::operator<=(const Time& t2) const
 {
 	return (isSmaller(t2) || isEqual(t2));
 }
 
-bool Time::operator>=(const Time& t2)
+bool Time::operator>=(const Time& t2) const
 {
 	return (isBigger(t2) || isEqual(t2));
 }
 
 std::ostream& operator<<(std::ostream& os, const Time& time)
 {
-	os << std::setfill('0');
+	os << std::right << std::setfill('0');
 	os << std::setw(2) << time.hours;
 	os << ":" << std::setw(2) << time.minutes;
 	os << ":" << std::setw(2) << time.seconds << "  ";

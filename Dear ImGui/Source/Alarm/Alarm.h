@@ -8,7 +8,7 @@ class Alarm
 public:
 
 	Time time;
-	bool enabled;
+	int enabled;
 	
 	Alarm();
 	Alarm(const Time& time);

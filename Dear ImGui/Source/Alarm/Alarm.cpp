@@ -1,7 +1,7 @@
 #include "Alarm.h"
 
 Alarm::Alarm()
-	: time(Time::now()), enabled(false) {
+	: time(Time::now()), enabled(true) {
 }
 
 Alarm::Alarm(const Time& time)
@@ -10,7 +10,10 @@ Alarm::Alarm(const Time& time)
 
 void Alarm::toggle()
 {
-	enabled = !enabled;
+	if (enabled)
+		enabled = 0;
+	else
+		enabled = 1;
 }
 
 void Alarm::toggle(bool enabled)

@@ -4,7 +4,7 @@
 #include <iomanip>
 #include <sstream>
 
-enum WeekDay : signed char
+enum WeekDay
 {
 	Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
 };
@@ -15,27 +15,29 @@ public:
 	int hours;
 	int minutes;
 	int seconds;
-	WeekDay day;
+	int day;
 
 	Time();
-	Time(WeekDay day, int hours, int minutes, int seconds);
+	Time(int day, int hours, int minutes, int seconds);
 	Time(const time_t time);
 	~Time() = default;
 
 	static Time now();
 
+	void addTime(const Time& time);
+
 	static std::string toString(const Time& time);
-	static std::string weekDayToString(WeekDay day);
+	static std::string weekDayToString(int day);
 
-	bool isEqual(const Time& time);
-	bool isSmaller(const Time& time);
-	bool isBigger(const Time& time);
+	bool isEqual(const Time& time) const;
+	bool isSmaller(const Time& time) const;
+	bool isBigger(const Time& time) const;
 
-	bool operator==(const Time& t2);
-	bool operator<(const Time& t2);
-	bool operator>(const Time& t2);
-	bool operator<=(const Time& t2);
-	bool operator>=(const Time& t2);
+	bool operator==(const Time& t2) const;
+	bool operator<(const Time& t2) const;
+	bool operator>(const Time& t2) const;
+	bool operator<=(const Time& t2) const;
+	bool operator>=(const Time& t2) const;
 
 	friend std::ostream& operator<<(std::ostream& os, const Time& time);
 };
