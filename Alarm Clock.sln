@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Alarm Clock", "Alarm Clock\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Dear ImGui", "Dear ImGui\Dear ImGui.vcxproj", "{EDEE0EA0-73BB-4464-9D6E-416FA41F4195}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{07C4CAB8-49D2-4FFA-9AD0-D5C2254C2FDA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -23,14 +25,18 @@ Global
 		{0869CE03-76C2-4A90-8727-D75DDE9D8910}.Release|x64.Build.0 = Release|x64
 		{0869CE03-76C2-4A90-8727-D75DDE9D8910}.Release|x86.ActiveCfg = Release|Win32
 		{0869CE03-76C2-4A90-8727-D75DDE9D8910}.Release|x86.Build.0 = Release|Win32
-		{EDEE0EA0-73BB-4464-9D6E-416FA41F4195}.Debug|x64.ActiveCfg = Debug|x64
-		{EDEE0EA0-73BB-4464-9D6E-416FA41F4195}.Debug|x64.Build.0 = Debug|x64
+		{EDEE0EA0-73BB-4464-9D6E-416FA41F4195}.Debug|x64.ActiveCfg = Release|x64
 		{EDEE0EA0-73BB-4464-9D6E-416FA41F4195}.Debug|x86.ActiveCfg = Debug|Win32
 		{EDEE0EA0-73BB-4464-9D6E-416FA41F4195}.Debug|x86.Build.0 = Debug|Win32
 		{EDEE0EA0-73BB-4464-9D6E-416FA41F4195}.Release|x64.ActiveCfg = Release|x64
 		{EDEE0EA0-73BB-4464-9D6E-416FA41F4195}.Release|x64.Build.0 = Release|x64
 		{EDEE0EA0-73BB-4464-9D6E-416FA41F4195}.Release|x86.ActiveCfg = Release|Win32
 		{EDEE0EA0-73BB-4464-9D6E-416FA41F4195}.Release|x86.Build.0 = Release|Win32
+		{07C4CAB8-49D2-4FFA-9AD0-D5C2254C2FDA}.Debug|x64.ActiveCfg = Debug
+		{07C4CAB8-49D2-4FFA-9AD0-D5C2254C2FDA}.Debug|x64.Build.0 = Debug
+		{07C4CAB8-49D2-4FFA-9AD0-D5C2254C2FDA}.Debug|x86.ActiveCfg = Debug
+		{07C4CAB8-49D2-4FFA-9AD0-D5C2254C2FDA}.Release|x64.ActiveCfg = Release
+		{07C4CAB8-49D2-4FFA-9AD0-D5C2254C2FDA}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
