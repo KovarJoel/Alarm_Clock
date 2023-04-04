@@ -15,7 +15,6 @@ class Application
 private:
 	bool m_isInitialized = false;
 	GLFWwindow* m_window = nullptr;
-	ImColor m_clearColor{};
 	AlarmClock m_clock;
 
 	void renderEnd();

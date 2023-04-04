@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ImGui/imgui.h>
+#include <GLFW/glfw3.h>
 #include <vector>
 #include <thread>
 #include <chrono>
@@ -12,6 +13,11 @@ class AlarmClock
 private:
 	bool isRunning = false;
 	Sound sound;
+
+	const GLFWwindow* window = nullptr;
+
+	ImVec2 size;
+	ImVec2 position;
 	
 	std::thread ring;
 	void ringCallback();
@@ -22,7 +28,7 @@ private:
 public:
 	AlarmClock();
 	~AlarmClock();
-	void init();
+	void init(GLFWwindow* window);
 
 	std::vector<Alarm> alarms;
 

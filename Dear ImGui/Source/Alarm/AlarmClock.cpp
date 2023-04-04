@@ -1,8 +1,7 @@
 #include "AlarmClock.h"
 
 AlarmClock::AlarmClock()
-{
-	init();
+	:size(500, 500), position(200, 100) {
 }
 
 AlarmClock::~AlarmClock()
@@ -10,11 +9,13 @@ AlarmClock::~AlarmClock()
 	ring.join();
 }
 
-void AlarmClock::init()
+void AlarmClock::init(GLFWwindow* window)
 {
 	if (isRunning)
 		return;
 
+	this->window = window;
+	
 	sound.setPath("C:\\Users\\abc\\Desktop\\gong.wav");
 
 	alarms.push_back(Alarm(Time(Saturday, 8, 0, 0)));
@@ -36,19 +37,32 @@ void AlarmClock::update()
 {
 	//sortAlarms();
 	//sortAlarmsUpcoming();
+
+	glfwSetWindowSize((GLFWwindow*)window, size.x, size.y);
+	glfwSetWindowPos((GLFWwindow*)window, position.x, position.y);
+
+	if (!isRunning)
+		glfwSetWindowShouldClose((GLFWwindow*)window, GLFW_TRUE);
 }
 
 void AlarmClock::render()
 {
 	ImGuiWindowFlags flags = 0;
+	flags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse;
 	//flags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground;
 	//flags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoMove;
-	flags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoResize;
-	flags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar;
-	flags |= ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize;
-
-	ImGui::SetNextWindowSize(ImVec2(500, 500));
-	ImGui::Begin("Alarms", nullptr, flags);
+	//flags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoResize;
+	//flags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar;
+	//flags |= ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize;
+	
+	ImGui::Begin("Alarm Clock", &isRunning, flags);
+	static bool doOnce = true;
+	if (doOnce) {
+		ImGui::SetWindowSize(size);
+		ImGui::SetWindowPos(position);
+		doOnce = false;
+	}
+	
 	ImGui::SameLine();
 	ImGui::Text(Time::toString(Time::now()).c_str());
 	ImGui::NewLine();
@@ -82,7 +96,7 @@ void AlarmClock::render()
 
 		if (child == i)
 		{
-			ImGui::BeginChild(ImGui::GetID("Alarms"), ImVec2(0, ImGui::GetFontSize() * 4.0f), false, flags);
+			ImGui::BeginChild(ImGui::GetID("Alarm Clock"), ImVec2(0, ImGui::GetFontSize() * 4.0f), false, flags);
 			float width = 100.0f;
 			ImGui::SetNextItemWidth(width);
 			ImGui::SliderInt("##edit hours", &alarms.at(child).time.hours, 0, 23);
@@ -111,7 +125,10 @@ void AlarmClock::render()
 
 		child = alarms.size() - 1;
 	}
+	ImGui::NewLine();
 	
+	size = ImGui::GetWindowSize();
+	position = ImGui::GetWindowPos();
 
 	ImGui::End();
 }

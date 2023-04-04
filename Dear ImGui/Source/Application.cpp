@@ -25,7 +25,10 @@ bool Application::init(const std::string& windowTitle, const int width, const in
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, GLFW_VERSION_MAJOR);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, GLFW_VERSION_MINOR);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+
+	glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_TRUE);
+	glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 	
 	m_window = glfwCreateWindow(width, height, windowTitle.c_str(), NULL, NULL);
 	if (!m_window)
@@ -56,8 +59,6 @@ bool Application::init(const std::string& windowTitle, const int width, const in
 	if (!ImGui_ImplOpenGL3_Init(glsl_version.c_str()))
 		return false;
 
-	m_clearColor = ImColor(0.12f, 0.5f, 0.66f, 1.0f);
-
 	auto closeCallback = [](GLFWwindow* window) {
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	};
@@ -65,7 +66,7 @@ bool Application::init(const std::string& windowTitle, const int width, const in
 	
 	glfwSetErrorCallback(Assert::assertGlfwCallback);
 
-	m_clock.init();
+	m_clock.init(m_window);
 
 	ImGui::GetIO().Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\FiraCode-Regular.ttf", 20.0f);
 
@@ -107,7 +108,7 @@ void Application::render()
 {
 	m_clock.render();
 
-	ImGui::ShowDemoWindow();
+	//ImGui::ShowDemoWindow();
 
 	renderEnd();
 }
@@ -120,7 +121,7 @@ void Application::renderEnd()
 	glfwGetFramebufferSize(m_window, &display_w, &display_h);
 	glViewport(0, 0, display_w, display_h);
 
-	glClearColor(m_clearColor.Value.x, m_clearColor.Value.y, m_clearColor.Value.z, m_clearColor.Value.z);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
