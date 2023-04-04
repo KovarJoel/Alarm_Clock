@@ -16,12 +16,10 @@ void AlarmClock::init(GLFWwindow* window)
 
 	this->window = window;
 	
-	sound.setPath("C:\\Users\\abc\\Desktop\\gong.wav");
+	sound.setPath("Dependencies\\gong.wav");
 
-	alarms.push_back(Alarm(Time(Saturday, 8, 0, 0)));
-	alarms.push_back(Alarm(Time(Monday, 6, 0, 0)));
-	alarms.push_back(Alarm(Time(Saturday, 12, 12, 12)));
-	alarms.push_back(Alarm(Time(Wednesday, 20, 20, 20)));
+	alarms.push_back(Alarm(Time(Saturday, 10, 25, 0)));
+	alarms.push_back(Alarm(Time(Saturday, 10, 30, 0)));
 	sortAlarms();
 	
 	isRunning = true;

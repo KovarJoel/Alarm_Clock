@@ -68,7 +68,7 @@ bool Application::init(const std::string& windowTitle, const int width, const in
 
 	m_clock.init(m_window);
 
-	ImGui::GetIO().Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\FiraCode-Regular.ttf", 20.0f);
+	ImGui::GetIO().Fonts->AddFontFromFileTTF("Dependencies\\FiraCode-Regular.ttf", 20.0f);
 
 	m_isInitialized = true;
 	return true;
