@@ -5,9 +5,11 @@ VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Alarm Clock", "Alarm Clock\Alarm Clock.vcxproj", "{0869CE03-76C2-4A90-8727-D75DDE9D8910}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Dear ImGui", "Dear ImGui\Dear ImGui.vcxproj", "{EDEE0EA0-73BB-4464-9D6E-416FA41F4195}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Alarm Clock", "Dear ImGui\Dear ImGui.vcxproj", "{EDEE0EA0-73BB-4464-9D6E-416FA41F4195}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{07C4CAB8-49D2-4FFA-9AD0-D5C2254C2FDA}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Gong", "Gong\Gong.vcxproj", "{A7CF7CDF-E263-4A28-959B-A3634E10F93B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +39,14 @@ Global
 		{07C4CAB8-49D2-4FFA-9AD0-D5C2254C2FDA}.Debug|x86.ActiveCfg = Debug
 		{07C4CAB8-49D2-4FFA-9AD0-D5C2254C2FDA}.Release|x64.ActiveCfg = Release
 		{07C4CAB8-49D2-4FFA-9AD0-D5C2254C2FDA}.Release|x86.ActiveCfg = Release
+		{A7CF7CDF-E263-4A28-959B-A3634E10F93B}.Debug|x64.ActiveCfg = Debug|x64
+		{A7CF7CDF-E263-4A28-959B-A3634E10F93B}.Debug|x64.Build.0 = Debug|x64
+		{A7CF7CDF-E263-4A28-959B-A3634E10F93B}.Debug|x86.ActiveCfg = Debug|Win32
+		{A7CF7CDF-E263-4A28-959B-A3634E10F93B}.Debug|x86.Build.0 = Debug|Win32
+		{A7CF7CDF-E263-4A28-959B-A3634E10F93B}.Release|x64.ActiveCfg = Release|x64
+		{A7CF7CDF-E263-4A28-959B-A3634E10F93B}.Release|x64.Build.0 = Release|x64
+		{A7CF7CDF-E263-4A28-959B-A3634E10F93B}.Release|x86.ActiveCfg = Release|Win32
+		{A7CF7CDF-E263-4A28-959B-A3634E10F93B}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
