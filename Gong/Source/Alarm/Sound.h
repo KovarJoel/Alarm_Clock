@@ -18,6 +18,5 @@ public:
 	bool play();
 	bool setPath(const std::string& path);
 
-private:
-	bool pathOk(const std::string& path);
+	static bool pathOk(const std::string& path);
 };
