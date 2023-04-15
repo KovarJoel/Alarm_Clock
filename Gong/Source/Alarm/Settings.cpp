@@ -39,7 +39,7 @@ void Settings::renderStyle()
 	for (int i = 0; i < colors.size(); i++)
 	{
 		bool isSelected = (i == m_styleColor);
-		if (ImGui::Selectable(colors.at(i).c_str(), isSelected))
+		if (ImGui::Selectable(colors[i].c_str(), isSelected))
 			m_styleColor = i;
 	}
 	ImGui::EndCombo();
@@ -120,7 +120,7 @@ void Settings::soundFileSelect()
 		for (int i = 0; i < m_soundFiles.size(); i++)
 		{
 			bool isSelected = (i == m_file);
-			if (ImGui::Selectable(m_soundFiles.at(i).c_str(), isSelected))
+			if (ImGui::Selectable(m_soundFiles[i].c_str(), isSelected))
 				m_file = i;
 		}
 		ImGui::EndCombo();
@@ -160,7 +160,7 @@ void Settings::soundFileEdit()
 			}
 		}
 
-		newName = "";
+		newName.clear();
 	}
 }
 
@@ -176,7 +176,7 @@ void Settings::soundFileAdd()
 		if (std::filesystem::exists(newSound))
 		{
 			copyFile(newSound);
-			newSound = "";
+			newSound.clear();
 			m_copyQueue = m_soundFiles.size();
 		}
 	}

@@ -40,8 +40,8 @@ void AlarmClock::init()
 	extern irrklang::ISoundEngine* soundEngine;
 	m_sound.setEngine(soundEngine);
 
-	alarms.push_back(Alarm(Time(Saturday, 10, 25, 0)));
-	alarms.push_back(Alarm(Time(Saturday, 10, 30, 0)));
+	alarms.emplace_back(Alarm(Time(Saturday, 10, 25, 0)));
+	alarms.emplace_back(Alarm(Time(Saturday, 10, 30, 0)));
 	sortAlarms();
 
 	m_isRunning = true;
@@ -110,12 +110,14 @@ void AlarmClock::renderAlarms()
 	static int child = -1;
 	for (int i = 0; i < alarms.size(); i++)
 	{
+		Alarm& alarm = alarms[i];
+
 		std::string hiddenID = "##" + std::to_string(i);
-		ImGui::Text(Time::toString(alarms.at(i).time).c_str());
+		ImGui::Text(Time::toString(alarm.time).c_str());
 
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(100.0f);
-		ImGui::SliderInt((hiddenID + " toggle ").c_str(), &alarms.at(i).enabled, 0, 1, (alarms.at(i).enabled ? "ON" : "OFF"));
+		ImGui::SliderInt((hiddenID + " toggle ").c_str(), &alarm.enabled, 0, 1, (alarm.enabled ? "ON" : "OFF"));
 
 		ImGui::SameLine();
 		if (ImGui::Button(("EDIT" + hiddenID).c_str()))
@@ -142,7 +144,7 @@ void AlarmClock::renderAlarms()
 	{
 		sortAlarms();
 
-		alarms.push_back(Alarm(Time::last()));
+		alarms.emplace_back(Alarm(Time::last()));
 		child = (int)alarms.size() - 1;
 	}
 	ImGui::NewLine();
@@ -154,16 +156,17 @@ void AlarmClock::renderAlarms()
 void AlarmClock::renderAlarmsChild(int& child)
 {
 	float width = 100.0f;
-	
+	Time& time = alarms[child].time;
+
 	ImGui::BeginChild(ImGui::GetID("Alarms"), ImVec2(0, ImGui::GetFontSize() * 4.0f), false);
 	ImGui::SetNextItemWidth(width);
-	ImGui::SliderInt("##edit hours", &alarms.at(child).time.hours, 0, 23);
+	ImGui::SliderInt("##edit hours", &time.hours, 0, 23);
 	ImGui::SameLine(0.0f, 4.0f);
 	ImGui::SetNextItemWidth(width * 2.0f + 4.0f);
-	ImGui::SliderInt2("##edit rest", &alarms.at(child).time.minutes, 0, 59);
+	ImGui::SliderInt2("##edit rest", &time.minutes, 0, 59);
 	ImGui::SameLine(0.0f, 4.0f);
 	ImGui::SetNextItemWidth(width);
-	ImGui::SliderInt("##edit day", (int*)&alarms.at(child).time.day, 0, 6, Time::weekDayToString(alarms.at(child).time.day).c_str());
+	ImGui::SliderInt("##edit day", &time.day, 0, 6, Time::weekDayToString(time.day).c_str());
 
 	if (ImGui::Button("Done"))
 	{
@@ -213,7 +216,7 @@ void AlarmClock::sortAlarmsUpcoming()
 	size_t next = 0;
 
 	for (size_t i = 0; i < alarms.size(); i++) {
-		if (alarms.at(i).time >= now) {
+		if (alarms[i].time >= now) {
 			next = i;
 			break;
 		}
@@ -222,9 +225,9 @@ void AlarmClock::sortAlarmsUpcoming()
 	for (size_t i = next, j = 0; j < alarms.size(); i++, j++)
 	{
 		if (i < alarms.size())
-			alarms.at(j) = tempAlarms.at(i);
+			alarms[j] = tempAlarms.at(i);
 		else
-			alarms.at(j) = tempAlarms.at(i - alarms.size());
+			alarms[j] = tempAlarms[i - alarms.size()];
 	}
 }
 
