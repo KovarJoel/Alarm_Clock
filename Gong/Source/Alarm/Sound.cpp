@@ -8,13 +8,13 @@
 Sound::Sound()
 {
 	extern irrklang::ISoundEngine* soundEngine;
-	m_soundEngine = m_soundEngine;
+	m_soundEngine = soundEngine;
 }
 
 Sound::Sound(const std::string& path)
 {
 	extern irrklang::ISoundEngine* soundEngine;
-	m_soundEngine = m_soundEngine;
+	m_soundEngine = soundEngine;
 
 	setPath(path);
 }
