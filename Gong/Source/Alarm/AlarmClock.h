@@ -11,30 +11,41 @@
 class AlarmClock
 {
 private:
-	bool isRunning = false;
-	Sound sound;
+	bool m_isRunning = false;
+	Sound m_sound;
 
-	const GLFWwindow* window = nullptr;
+	GLFWwindow* m_window = nullptr;
 
-	ImVec2 size;
-	ImVec2 position;
+	ImGuiID dockSpace = 0;
+
+	ImVec2 m_size;
+	ImVec2 m_position;
 	
-	std::thread ring;
-	void ringCallback();
+	std::thread m_ring;
 
-	void sortAlarms();
-	void sortAlarmsUpcoming();
+public:
+	std::vector<Alarm> alarms;
 	
 public:
 	AlarmClock();
 	~AlarmClock();
-	void init(GLFWwindow* window);
-
-	std::vector<Alarm> alarms;
+	void init();
 
 	void handleEvents();
 	void update();
 	void render();
 
 	void close();
+
+private:
+	void renderAlarms();
+	void renderAlarmsChild(int& child);
+
+	void renderSettings();
+
+private:
+	void ringCallback();
+
+	void sortAlarms();
+	void sortAlarmsUpcoming();
 };

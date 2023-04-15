@@ -1,29 +1,48 @@
 #include "AlarmClock.h"
 
+#include "..\Settings.h"
+
+#include <array>
+#include <cstdlib>
+#include <fstream>
+#include <ImGui/imgui_internal.h>
+#include <ImGui/imgui_stdlib.h>
+
 AlarmClock::AlarmClock()
-	:size(500, 500), position(200, 100) {
+	:m_size(900, 506), m_position(200, 100) {
+
+	char* buff;
+	_dupenv_s(&buff, nullptr, "AppData");
+	if (!buff)
+		return;
+	std::string command = "mkdir ";
+	command += buff;
+	free(buff);
+	command += "\\Gong\\";
+	system(command.c_str());
 }
 
 AlarmClock::~AlarmClock()
 {
-	ring.join();
+	close();
+	m_ring.join();
 }
 
-void AlarmClock::init(GLFWwindow* window)
+void AlarmClock::init()
 {
-	if (isRunning)
+	if (m_isRunning)
 		return;
-
-	this->window = window;
+	extern GLFWwindow* window;
+	m_window = window;
 	
-	sound.setPath("Dependencies\\gong.wav");
+	m_sound.setPath("Dependencies\\gong.wav");
 
 	alarms.push_back(Alarm(Time(Saturday, 10, 25, 0)));
 	alarms.push_back(Alarm(Time(Saturday, 10, 30, 0)));
 	sortAlarms();
 	
-	isRunning = true;
-	ring = std::thread(&AlarmClock::ringCallback, this);
+	m_isRunning = true;
+	m_ring = std::thread(&AlarmClock::ringCallback, this);
 }
 
 void AlarmClock::handleEvents()
@@ -33,18 +52,15 @@ void AlarmClock::handleEvents()
 
 void AlarmClock::update()
 {
-	//sortAlarms();
-	//sortAlarmsUpcoming();
+	glfwSetWindowSize(m_window, (int)m_size.x, (int)m_size.y);
+	glfwSetWindowPos(m_window, (int)m_position.x, (int)m_position.y);
 
-	glfwSetWindowSize((GLFWwindow*)window, size.x, size.y);
-	glfwSetWindowPos((GLFWwindow*)window, position.x, position.y);
-
-	if (!isRunning)
-		glfwSetWindowShouldClose((GLFWwindow*)window, GLFW_TRUE);
+	if (!m_isRunning)
+		glfwSetWindowShouldClose(m_window, GLFW_TRUE);
 }
 
 void AlarmClock::render()
-{
+{	
 	ImGuiWindowFlags flags = 0;
 	flags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse;
 	//flags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground;
@@ -52,16 +68,35 @@ void AlarmClock::render()
 	//flags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoResize;
 	//flags |= ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar;
 	//flags |= ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize;
-	
-	ImGui::Begin("Alarm Clock", &isRunning, flags);
+
+	if (!ImGui::Begin("Gong", &m_isRunning, flags))
+		return;
+
 	static bool doOnce = true;
 	if (doOnce) {
-		ImGui::SetWindowSize(size);
-		ImGui::SetWindowPos(position);
+		ImGui::SetWindowSize(m_size);
+		ImGui::SetWindowPos(m_position);
 		doOnce = false;
 	}
-	
-	ImGui::SameLine();
+	if (ImGui::BeginTabBar("Bar"))
+	{
+		if (ImGui::BeginTabItem("Alarms")) {
+			renderAlarms();
+			ImGui::EndTabItem();
+		}
+		if (ImGui::BeginTabItem("Settings")) {
+			renderSettings();
+			ImGui::EndTabItem();
+		}
+
+		ImGui::EndTabBar();
+	}
+
+	ImGui::End();
+}
+
+void AlarmClock::renderAlarms()
+{
 	ImGui::Text(Time::toString(Time::now()).c_str());
 	ImGui::NewLine();
 
@@ -93,47 +128,56 @@ void AlarmClock::render()
 		}
 
 		if (child == i)
-		{
-			ImGui::BeginChild(ImGui::GetID("Alarm Clock"), ImVec2(0, ImGui::GetFontSize() * 4.0f), false, flags);
-			float width = 100.0f;
-			ImGui::SetNextItemWidth(width);
-			ImGui::SliderInt("##edit hours", &alarms.at(child).time.hours, 0, 23);
-			ImGui::SameLine(0.0f, 4.0f);
-			ImGui::SetNextItemWidth(width * 2.0f + 4.0f);
-			ImGui::SliderInt2("##edit rest", &alarms.at(child).time.minutes, 0, 59);
-			ImGui::SameLine(0.0f, 4.0f);
-			ImGui::SetNextItemWidth(width);
-			ImGui::SliderInt("##edit day", (int*)&alarms.at(child).time.day, 0, 6, Time::weekDayToString(alarms.at(child).time.day).c_str());
-			if (ImGui::Button("Done"))
-			{
-				sortAlarms();
-				child = -1;
-			}
-			ImGui::EndChild();
-		}
+			renderAlarmsChild(child);
 	}
 
 	ImGui::NewLine();
 	ImGui::NewLine();
 	if (ImGui::Button("Add Alarm"))
 	{
-		Time last = Time::now();
-		last.addTime(Time(Sunday, 0, 0, -1));
-		alarms.push_back(Alarm(last));
+		sortAlarms();
 
-		child = alarms.size() - 1;
+		alarms.push_back(Alarm(Time::last()));
+		child = (int)alarms.size() - 1;
 	}
 	ImGui::NewLine();
-	
-	size = ImGui::GetWindowSize();
-	position = ImGui::GetWindowPos();
 
-	ImGui::End();
+	m_size = ImGui::GetWindowSize();
+	m_position = ImGui::GetWindowPos();
+}
+
+void AlarmClock::renderAlarmsChild(int& child)
+{
+	float width = 100.0f;
+	
+	ImGui::BeginChild(ImGui::GetID("Alarms"), ImVec2(0, ImGui::GetFontSize() * 4.0f), false);
+	ImGui::SetNextItemWidth(width);
+	ImGui::SliderInt("##edit hours", &alarms.at(child).time.hours, 0, 23);
+	ImGui::SameLine(0.0f, 4.0f);
+	ImGui::SetNextItemWidth(width * 2.0f + 4.0f);
+	ImGui::SliderInt2("##edit rest", &alarms.at(child).time.minutes, 0, 59);
+	ImGui::SameLine(0.0f, 4.0f);
+	ImGui::SetNextItemWidth(width);
+	ImGui::SliderInt("##edit day", (int*)&alarms.at(child).time.day, 0, 6, Time::weekDayToString(alarms.at(child).time.day).c_str());
+
+	if (ImGui::Button("Done"))
+	{
+		sortAlarms();
+		child = -1;
+	}
+	ImGui::EndChild();
+}
+
+void AlarmClock::renderSettings()
+{
+	Settings::renderStyle();
+	ImGui::NewLine();
+	Settings::renderSound();
 }
 
 void AlarmClock::close()
 {
-	isRunning = false;
+	m_isRunning = false;
 }
 
 void AlarmClock::sortAlarms()
@@ -186,7 +230,7 @@ void AlarmClock::ringCallback()
 	Time now = Time::now();
 	Time lastRing;
 	
-	while (isRunning)
+	while (m_isRunning)
 	{
 		now = Time::now();
 
@@ -200,7 +244,7 @@ void AlarmClock::ringCallback()
 			if (!(now == alarm.time))
 				continue;
 
-			sound.play();
+			m_sound.play();
 			lastRing = now;
 		}
 
