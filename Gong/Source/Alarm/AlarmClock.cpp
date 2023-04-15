@@ -3,7 +3,7 @@
 
 #include "AlarmClock.h"
 
-#include "..\Settings.h"
+#include "Settings.h"
 
 #include <array>
 #include <cstdlib>
@@ -28,7 +28,6 @@ AlarmClock::AlarmClock()
 AlarmClock::~AlarmClock()
 {
 	close();
-	m_ring.join();
 }
 
 void AlarmClock::init()
@@ -38,14 +37,14 @@ void AlarmClock::init()
 	extern GLFWwindow* window;
 	m_window = window;
 	
-	m_sound.setPath("Dependencies\\gong.wav");
+	extern irrklang::ISoundEngine* soundEngine;
+	m_sound.setEngine(soundEngine);
 
 	alarms.push_back(Alarm(Time(Saturday, 10, 25, 0)));
 	alarms.push_back(Alarm(Time(Saturday, 10, 30, 0)));
 	sortAlarms();
-	
+
 	m_isRunning = true;
-	m_ring = std::thread(&AlarmClock::ringCallback, this);
 }
 
 void AlarmClock::handleEvents()
@@ -60,6 +59,9 @@ void AlarmClock::update()
 
 	if (!m_isRunning)
 		glfwSetWindowShouldClose(m_window, GLFW_TRUE);
+
+	m_sound.setPath(Settings::getSoundFile());
+	ring();
 }
 
 void AlarmClock::render()
@@ -226,31 +228,24 @@ void AlarmClock::sortAlarmsUpcoming()
 	}
 }
 
-void AlarmClock::ringCallback()
+void AlarmClock::ring()
 {
 	using namespace std::chrono_literals;
 	
 	Time now = Time::now();
-	Time lastRing;
+	static Time lastRing;
 	
-	while (m_isRunning)
-	{
-		now = Time::now();
+	if (now == lastRing)
+		return;
 
-		if (now == lastRing)
+	for (auto& alarm : alarms)
+	{
+		if (!alarm.enabled)
+			continue;
+		if (!(now == alarm.time))
 			continue;
 
-		for (auto& alarm : alarms)
-		{
-			if (!alarm.enabled)
-				continue;
-			if (!(now == alarm.time))
-				continue;
-
-			m_sound.play();
-			lastRing = now;
-		}
-
-		std::this_thread::sleep_for(200ms);
+		m_sound.play();
+		lastRing = now;
 	}
 }

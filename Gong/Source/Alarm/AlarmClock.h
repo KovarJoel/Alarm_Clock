@@ -21,8 +21,6 @@ private:
 	ImVec2 m_size;
 	ImVec2 m_position;
 	
-	std::thread m_ring;
-
 public:
 	std::vector<Alarm> alarms;
 	
@@ -44,7 +42,7 @@ private:
 	void renderSettings();
 
 private:
-	void ringCallback();
+	void ring();
 
 	void sortAlarms();
 	void sortAlarmsUpcoming();
