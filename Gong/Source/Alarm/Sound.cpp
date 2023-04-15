@@ -3,7 +3,7 @@
 
 #include "Sound.h"
 
-#include <fstream>
+#include <filesystem>
 
 Sound::Sound()
 {
@@ -21,7 +21,7 @@ Sound::Sound(const std::string& path)
 
 bool Sound::play()
 {
-	if (!pathOk(m_path))
+	if (!std::filesystem::exists(m_path))
 		return false;
 
 	m_soundEngine->play2D(m_path.c_str());
@@ -31,21 +31,14 @@ bool Sound::play()
 
 bool Sound::setPath(const std::string& path)
 {
-	if (!pathOk(path))
+	if (!std::filesystem::exists(path))
 		return false;
 
 	m_path = path;
 	return true;
 }
 
-bool Sound::pathOk(const std::string& path)
+void Sound::setEngine(irrklang::ISoundEngine* engine)
 {
-	if (path.empty())
-		return false;
-
-	std::ifstream file(path);
-
-	if (file.good())
-		return true;
-	return false;
+	m_soundEngine = engine;
 }
