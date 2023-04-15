@@ -17,6 +17,5 @@ public:
 	
 	bool play();
 	bool setPath(const std::string& path);
-
-	static bool pathOk(const std::string& path);
+	void setEngine(irrklang::ISoundEngine* engine);
 };
