@@ -36,7 +36,7 @@
     <ClCompile Include="Source\Alarm\Time.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Settings.cpp">
+    <ClCompile Include="Source\Alarm\Settings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -61,7 +61,7 @@
     <ClInclude Include="Source\Alarm\Time.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Settings.h">
+    <ClInclude Include="Source\Alarm\Settings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

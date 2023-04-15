@@ -12,10 +12,12 @@ private:
 	static unsigned int m_styleColor;
 	static float m_volume;
 	static std::vector<std::string> m_soundFiles;
-	static unsigned int m_soundFile;
+	static unsigned int m_file;
+	static unsigned int m_copyQueue;	// increment m_file not immediately after starting to copy but rather on completion
 
 public:
 	Settings() = delete;
+	static std::string getSoundFile();
 	static void renderStyle();
 	static void renderSound();
 
@@ -26,8 +28,11 @@ private:
 	static void soundFileEdit();
 	static void soundFileAdd();
 
-	static bool fileExists(const std::string& filePath);
-	static std::string copyFile(const std::string& source);
+	static void copyFile(const std::string& source);
 	static void renameFile(std::string& oldName, const std::string& newName);
-	static void deleteFile(const std::string& name);
+
+	static void pullDirectoryFiles();
+	static std::string getDirectoryPath();
+	static std::string getFileNameSubstr(const std::string& name);
+	static std::string getExtension(const std::string& name);
 };
