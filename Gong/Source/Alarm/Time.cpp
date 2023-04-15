@@ -27,10 +27,12 @@ Time Time::now()
 Time Time::last()
 {
 	Time time = now();
-	Time second = (0, 0, 0, 1);
+	Time second(0, 0, 0, 1);
 
 	while (time.seconds)
 		time = time - second;
+	
+	return time;
 }
 
 void Time::addTime(const Time& time)
