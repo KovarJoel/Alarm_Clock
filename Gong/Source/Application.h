@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 #include <irrKlang/irrKlang.h>
 #include <ImGui/imgui.h>
+#include "Alarm/AlarmClock.h"
 
 class Application
 {
@@ -12,6 +13,8 @@ private:
 
 	GLFWwindow* m_window;
 	irrklang::ISoundEngine* m_soundEngine;
+
+	AlarmClock m_alarmClock;
 
 public:
 	Application();

@@ -4,8 +4,8 @@
 #include <ImGui/imgui_impl_glfw.h>
 #include <ImGui/imgui_impl_opengl3.h>
 
-const GLFWwindow* window = nullptr;
-const irrklang::ISoundEngine* soundEngine = nullptr;
+GLFWwindow* window = nullptr;
+irrklang::ISoundEngine* soundEngine = nullptr;
 
 Application::Application()
 	: m_initializedGLFW(false), m_initializedDearImGui(false), m_window(nullptr), m_soundEngine(nullptr) {
@@ -19,6 +19,8 @@ Application::Application(const std::string& windowTitle, const int width, const 
 
 Application::~Application()
 {
+	m_alarmClock.close();
+
 	if (m_initializedDearImGui)
 	{
 		ImGui_ImplOpenGL3_Shutdown();
@@ -51,6 +53,8 @@ bool Application::init(const std::string& windowTitle, const int width, const in
 		return false;
 	m_soundEngine->setSoundVolume(1.0f);
 	soundEngine = m_soundEngine;
+
+	m_alarmClock.init();
 
 	return true;
 }
@@ -94,6 +98,7 @@ void Application::initDearImGui()
 	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
 
 	ImGui::StyleColorsLight();
+
 	ImGuiStyle& style = ImGui::GetStyle();
 	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 	{
@@ -131,18 +136,21 @@ void Application::handleEvents()
 		return;
 	if (io.WantCaptureMouse)
 		return;
+
+	m_alarmClock.handleEvents();
 }
 
 void Application::update()
 {
-
+	m_alarmClock.update();
 }
 
 void Application::render()
 {
 	renderStart();
 
-
+	m_alarmClock.render();
+	ImGui::ShowDemoWindow();
 
 	renderEnd();
 }
@@ -158,7 +166,7 @@ void Application::renderEnd()
 {
 	ImGui::Render();
 
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
