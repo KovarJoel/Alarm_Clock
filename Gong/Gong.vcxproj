@@ -145,6 +145,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Alarm\SavedValues.cpp" />
     <ClCompile Include="Source\Alarm\Settings.cpp" />
     <ClCompile Include="Source\Alarm\Alarm.cpp" />
     <ClCompile Include="Source\Alarm\AlarmClock.cpp" />
@@ -160,6 +161,7 @@
     <None Include="irrKlang.dll" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Alarm\SavedValues.h" />
     <ClInclude Include="Source\Alarm\Settings.h" />
     <ClInclude Include="Source\Alarm\Alarm.h" />
     <ClInclude Include="Source\Alarm\AlarmClock.h" />

@@ -39,6 +39,9 @@
     <ClCompile Include="Source\Alarm\Settings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Alarm\SavedValues.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="irrKlang.dll" />
@@ -62,6 +65,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Alarm\Settings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Alarm\SavedValues.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -4,25 +4,17 @@
 #include "AlarmClock.h"
 
 #include "Settings.h"
+#include "SavedValues.h"
 
 #include <array>
 #include <cstdlib>
 #include <fstream>
+#include <filesystem>
 #include <ImGui/imgui_internal.h>
 #include <ImGui/imgui_stdlib.h>
 
 AlarmClock::AlarmClock()
 	:m_size(900, 506), m_position(200, 100) {
-
-	char* buff;
-	_dupenv_s(&buff, nullptr, "AppData");
-	if (!buff)
-		return;
-	std::string command = "mkdir ";
-	command += buff;
-	free(buff);
-	command += "\\Gong\\";
-	system(command.c_str());
 }
 
 AlarmClock::~AlarmClock()
@@ -40,9 +32,21 @@ void AlarmClock::init()
 	extern irrklang::ISoundEngine* soundEngine;
 	m_sound.setEngine(soundEngine);
 
-	alarms.emplace_back(Alarm(Time(Saturday, 10, 25, 0)));
-	alarms.emplace_back(Alarm(Time(Saturday, 10, 30, 0)));
+	alarms = SavedValues::loadAlarms();
 	sortAlarms();
+
+	SavedValues::createFile();
+	Settings::init();
+	
+	bool alreadyHasFile = false;
+	for (auto& entry : std::filesystem::directory_iterator(Settings::getDirectoryPath())) {
+		if (!Settings::getExtension(Settings::getFileNameSubstr(entry.path().string())).empty()) {
+			alreadyHasFile = true;
+			break;
+		}
+	}
+	if (!alreadyHasFile)
+		std::filesystem::copy_file(std::filesystem::current_path().string() + "\\Dependencies\\Sounds\\gong.wav", Settings::getDirectoryPath() + "gong.wav");
 
 	m_isRunning = true;
 }
@@ -108,6 +112,7 @@ void AlarmClock::renderAlarms()
 	ImGui::SeparatorText("Upcoming Alarms");
 
 	static int child = -1;
+	bool changes = false;
 	for (int i = 0; i < alarms.size(); i++)
 	{
 		Alarm& alarm = alarms[i];
@@ -132,6 +137,7 @@ void AlarmClock::renderAlarms()
 				child = -1;
 			if (child > i)
 				child--;
+			changes = true;
 		}
 
 		if (child == i)
@@ -146,16 +152,20 @@ void AlarmClock::renderAlarms()
 
 		alarms.emplace_back(Alarm(Time::last()));
 		child = (int)alarms.size() - 1;
+		changes = true;
 	}
 	ImGui::NewLine();
 
 	m_size = ImGui::GetWindowSize();
 	m_position = ImGui::GetWindowPos();
+
+	if (changes)
+		SavedValues::saveAlarms(alarms);
 }
 
 void AlarmClock::renderAlarmsChild(int& child)
 {
-	float width = 100.0f;
+	float width = 125.0f;
 	Time& time = alarms[child].time;
 
 	ImGui::BeginChild(ImGui::GetID("Alarms"), ImVec2(0, ImGui::GetFontSize() * 4.0f), false);
@@ -172,6 +182,7 @@ void AlarmClock::renderAlarmsChild(int& child)
 	{
 		sortAlarms();
 		child = -1;
+		SavedValues::saveAlarms(alarms);
 	}
 	ImGui::EndChild();
 }
@@ -192,7 +203,10 @@ void AlarmClock::sortAlarms()
 {
 	Alarm temp;
 	bool changes = false;
-	
+
+	if (!alarms.size())
+		return;
+
 	do
 	{
 		changes = false;
@@ -211,6 +225,9 @@ void AlarmClock::sortAlarms()
 
 void AlarmClock::sortAlarmsUpcoming()
 {
+	if (!alarms.size())
+		return;
+
 	std::vector<Alarm> tempAlarms = alarms;
 	Time now = Time::now();
 	size_t next = 0;
@@ -225,7 +242,7 @@ void AlarmClock::sortAlarmsUpcoming()
 	for (size_t i = next, j = 0; j < alarms.size(); i++, j++)
 	{
 		if (i < alarms.size())
-			alarms[j] = tempAlarms.at(i);
+			alarms[j] = tempAlarms[i];
 		else
 			alarms[j] = tempAlarms[i - alarms.size()];
 	}
