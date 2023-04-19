@@ -259,7 +259,10 @@ const std::string& SavedValues::savedPath()
 		}
 		path = buffer;
 
-		path += "\\Gong\\Data\\";
+		path += "\\Gong";
+		if (!std::filesystem::exists(path))
+			std::filesystem::create_directory(path);
+		path += "\\Data\\";
 		if (!std::filesystem::exists(path))
 			std::filesystem::create_directory(path);
 
