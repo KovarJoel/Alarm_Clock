@@ -117,7 +117,7 @@ void Application::initDearImGui()
 	glfwSetWindowCloseCallback(m_window, [](GLFWwindow* window) {glfwSetWindowShouldClose(window, GL_TRUE); });
 	glfwSetWindowSizeCallback(m_window, [](GLFWwindow* window, int width, int height) {glViewport(0, 0, width, height); });
 
-	ImGui::GetIO().Fonts->AddFontFromFileTTF("Dependencies\\Fonts\\FiraCode-Regular.ttf", 20.0f);
+	ImGui::GetIO().Fonts->AddFontFromFileTTF("Dependencies\\Fonts\\FiraCode-Regular.ttf", 24.0f);
 
 	m_initializedDearImGui = true;
 }
@@ -169,7 +169,7 @@ void Application::renderEnd()
 {
 	ImGui::Render();
 
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
