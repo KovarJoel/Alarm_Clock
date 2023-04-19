@@ -32,11 +32,11 @@ void AlarmClock::init()
 	extern irrklang::ISoundEngine* soundEngine;
 	m_sound.setEngine(soundEngine);
 
-	alarms = SavedValues::loadAlarms();
-	sortAlarms();
-
 	SavedValues::createFile();
 	Settings::init();
+
+	alarms = SavedValues::loadAlarms();
+	sortAlarms();
 	
 	bool alreadyHasFile = false;
 	for (auto& entry : std::filesystem::directory_iterator(Settings::getDirectoryPath())) {
