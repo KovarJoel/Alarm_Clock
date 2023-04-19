@@ -153,7 +153,7 @@ void Application::render()
 	renderStart();
 
 	m_alarmClock.render();
-	ImGui::ShowDemoWindow();
+	//ImGui::ShowDemoWindow();
 
 	renderEnd();
 }
