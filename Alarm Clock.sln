@@ -9,6 +9,8 @@ Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Gong", "Gong\Gong.vcxproj", "{A7CF7CDF-E263-4A28-959B-A3634E10F93B}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SetupGong", "SetupGong\SetupGong.vdproj", "{7E7D227C-FE37-4482-B411-2C0C9E8344C3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,7 +23,6 @@ Global
 		{EDEE0EA0-73BB-4464-9D6E-416FA41F4195}.Debug|x86.ActiveCfg = Debug|Win32
 		{EDEE0EA0-73BB-4464-9D6E-416FA41F4195}.Debug|x86.Build.0 = Debug|Win32
 		{EDEE0EA0-73BB-4464-9D6E-416FA41F4195}.Release|x64.ActiveCfg = Release|x64
-		{EDEE0EA0-73BB-4464-9D6E-416FA41F4195}.Release|x64.Build.0 = Release|x64
 		{EDEE0EA0-73BB-4464-9D6E-416FA41F4195}.Release|x86.ActiveCfg = Release|Win32
 		{EDEE0EA0-73BB-4464-9D6E-416FA41F4195}.Release|x86.Build.0 = Release|Win32
 		{07C4CAB8-49D2-4FFA-9AD0-D5C2254C2FDA}.Debug|x64.ActiveCfg = Debug
@@ -37,6 +38,10 @@ Global
 		{A7CF7CDF-E263-4A28-959B-A3634E10F93B}.Release|x64.Build.0 = Release|x64
 		{A7CF7CDF-E263-4A28-959B-A3634E10F93B}.Release|x86.ActiveCfg = Release|Win32
 		{A7CF7CDF-E263-4A28-959B-A3634E10F93B}.Release|x86.Build.0 = Release|Win32
+		{7E7D227C-FE37-4482-B411-2C0C9E8344C3}.Debug|x64.ActiveCfg = Debug
+		{7E7D227C-FE37-4482-B411-2C0C9E8344C3}.Debug|x86.ActiveCfg = Debug
+		{7E7D227C-FE37-4482-B411-2C0C9E8344C3}.Release|x64.ActiveCfg = Release
+		{7E7D227C-FE37-4482-B411-2C0C9E8344C3}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

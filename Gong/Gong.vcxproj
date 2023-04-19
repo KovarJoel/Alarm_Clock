@@ -103,7 +103,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(UserProfile)\Documents\.Programme\.libraries\.libs\x64</AdditionalLibraryDirectories>
-      <AdditionalDependencies>GLFW3.lib;OpenGL32.lib;irrKlang.lib;shell32.lib</AdditionalDependencies>
+      <AdditionalDependencies>GLFW3.lib;OpenGL32.lib;irrKlang.lib;shell32.lib;$(CoreLibraryDependencies)</AdditionalDependencies>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
@@ -140,7 +140,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(UserProfile)\Documents\.Programme\.libraries\.libs\x64</AdditionalLibraryDirectories>
-      <AdditionalDependencies>GLFW3.lib;OpenGL32.lib;irrKlang.lib;shell32.lib</AdditionalDependencies>
+      <AdditionalDependencies>GLFW3.lib;OpenGL32.lib;irrKlang.lib;shell32.lib;$(CoreLibraryDependencies)</AdditionalDependencies>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
