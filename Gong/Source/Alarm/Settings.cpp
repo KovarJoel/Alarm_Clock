@@ -9,13 +9,29 @@
 #include <ImGui/imgui_stdlib.h>
 #include <GLFW/glfw3.h>
 
+#include "SavedValues.h"
+
 irrklang::ISoundEngine* Settings::m_soundEngine;
 
-unsigned int Settings::m_styleColor = 0;
+unsigned int Settings::m_styleColor;
 float Settings::m_volume = 1.0f;
 std::vector<std::string> Settings::m_soundFiles;
 unsigned int Settings::m_file = 0;
 unsigned int Settings::m_copyQueue = 0;
+
+void Settings::init()
+{
+	extern irrklang::ISoundEngine* soundEngine;
+	m_soundEngine = soundEngine;
+
+	m_styleColor = SavedValues::loadStyleColor();
+	m_styleColor ? ImGui::StyleColorsDark() : ImGui::StyleColorsLight();
+
+	m_volume = SavedValues::loadVolume();
+	m_soundEngine->setSoundVolume(m_volume / 100.0f);
+
+	m_file = SavedValues::loadCurrentFile();
+}
 
 std::string Settings::getSoundFile()
 {
@@ -58,13 +74,11 @@ void Settings::renderStyle()
 		break;
 	}
 	lastColor = m_styleColor;
+	SavedValues::saveStyleColor(m_styleColor);
 }
 
 void Settings::renderSound()
 {
-	extern irrklang::ISoundEngine* soundEngine;
-	m_soundEngine = soundEngine;
-	
 	ImGui::SeparatorText("Sound");
 
 	soundVolume();
@@ -73,7 +87,9 @@ void Settings::renderSound()
 
 void Settings::soundVolume()
 {
+	static float oldVolume;
 	m_volume = m_soundEngine->getSoundVolume() * 100.0f;
+	oldVolume = m_volume;
 
 	if (m_volume <= 0.0f)
 		ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Volume     ");
@@ -82,6 +98,9 @@ void Settings::soundVolume()
 	ImGui::SameLine();
 	ImGui::SliderFloat("##Volume slider", &m_volume, 0.0f, 100.0f, "%.0f%%");
 	m_soundEngine->setSoundVolume(m_volume / 100.0f);
+
+	if (fabs(oldVolume - m_volume) > 1.0f)
+		SavedValues::saveVolume(m_volume);
 }
 
 void Settings::soundFile()
@@ -105,6 +124,7 @@ void Settings::soundFileSelect()
 		{
 			m_file++;
 			m_copyQueue = 0;
+			SavedValues::saveCurrentFile(m_file);
 		}
 	}
 
@@ -121,7 +141,10 @@ void Settings::soundFileSelect()
 		{
 			bool isSelected = (i == m_file);
 			if (ImGui::Selectable(m_soundFiles[i].c_str(), isSelected))
+			{
 				m_file = i;
+				SavedValues::saveCurrentFile(m_file);
+			}
 		}
 		ImGui::EndCombo();
 	}
@@ -136,7 +159,10 @@ void Settings::soundFileEdit()
 	if (ImGui::Button("Delete")) {
 		std::filesystem::remove(getDirectoryPath() + m_soundFiles.at(m_file));
 		if (m_file)
+		{
 			m_file--;
+			SavedValues::saveCurrentFile(m_file);
+		}
 	}
 
 	static std::string newName;
@@ -156,6 +182,7 @@ void Settings::soundFileEdit()
 		for (unsigned int i = 0; i < m_soundFiles.size(); i++) {
 			if (m_soundFiles.at(i) == newName) {
 				m_file = i;
+				SavedValues::saveCurrentFile(m_file);
 				break;
 			}
 		}
@@ -220,6 +247,11 @@ void Settings::pullDirectoryFiles()
 	{
 		std::stringstream buffer;
 		buffer << entry.path();
+
+		std::string fileName = getFileNameSubstr(buffer.str());
+		if (getExtension(fileName).empty())		// is directory
+			continue;
+
 		m_soundFiles.emplace_back(getFileNameSubstr(buffer.str().substr(0, buffer.str().size() - 1)));	// remove trailing "
 	}
 }

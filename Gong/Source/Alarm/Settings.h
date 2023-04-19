@@ -17,9 +17,14 @@ private:
 
 public:
 	Settings() = delete;
+	static void init();
 	static std::string getSoundFile();
 	static void renderStyle();
 	static void renderSound();
+
+	static std::string getDirectoryPath();
+	static std::string getFileNameSubstr(const std::string& name);
+	static std::string getExtension(const std::string& name);
 
 private:
 	static void soundVolume();
@@ -32,7 +37,4 @@ private:
 	static void renameFile(std::string& oldName, const std::string& newName);
 
 	static void pullDirectoryFiles();
-	static std::string getDirectoryPath();
-	static std::string getFileNameSubstr(const std::string& name);
-	static std::string getExtension(const std::string& name);
 };
